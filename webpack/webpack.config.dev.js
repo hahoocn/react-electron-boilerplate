@@ -1,7 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 const postcssNested = require('postcss-nested');
 const postcssMixins = require('postcss-mixins');
@@ -47,7 +46,7 @@ const webpackConfig = {
       {
         test: /\.css$/,
         include: srcPath,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&minimize&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss')
+        loader: 'style!css?modules&minimize&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/,
@@ -71,7 +70,6 @@ const webpackConfig = {
       template: srcPath + 'template/index.html',
       filename: distPath + 'index.html'
     }),
-    new ExtractTextPlugin('css/[name].css'),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
