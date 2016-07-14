@@ -1,13 +1,18 @@
 {
   "name": "react-electron-boilerplate",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Boilerplate app for Electron with React",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production electron ./build/main",
     "start:hot": "cross-env NODE_ENV=development babel-node webpack/webpack.devServer.js",
     "start:dev": "cross-env NODE_ENV=development electron -r babel-register -r babel-polyfill ./src/electron",
-    "dev": "npm run start:hot & npm run start:dev"
+    "dev": "npm run start:hot & npm run start:dev",
+    "build:page": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --progress",
+    "build:main": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.electron.js --progress",
+    "build": "npm run build:page && npm run build:main",
+    "clean": "rimraf build"
   },
   "repository": {
     "type": "git",
