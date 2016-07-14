@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:hot": "cross-env NODE_ENV=development babel-node webpack/webpack.devServer.js",
-    "start:dev": "cross-env NODE_ENV=development electron -r babel-register -r babel-polyfill ./main",
+    "start:dev": "cross-env NODE_ENV=development electron -r babel-register -r babel-polyfill ./src/electron",
     "dev": "npm run start:hot & npm run start:dev"
   },
   "repository": {
@@ -39,6 +39,7 @@
     "cross-env": "^1.0.8",
     "css-loader": "^0.23.1",
     "devtron": "^1.2.1",
+    "electron-packager": "^7.3.0",
     "electron-prebuilt": "^1.2.6",
     "eslint": "^2.13.1",
     "eslint-config-airbnb": "^9.0.1",

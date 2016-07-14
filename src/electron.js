@@ -9,7 +9,7 @@ function createWindow() {
     height: 600
   });
 
-  mainWindow.loadURL(`file://${__dirname}/src/template/dev.html`);
+  mainWindow.loadURL(`file://${__dirname}/template/dev.html`);
 
   /* if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools();
