@@ -1,6 +1,7 @@
 {
   "name": "react-electron-boilerplate",
-  "version": "0.2.0",
+  "productName": "MyApp",
+  "version": "0.3.0",
   "description": "Boilerplate app for Electron with React",
   "main": "main.js",
   "scripts": {
@@ -12,7 +13,9 @@
     "build:page": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --progress",
     "build:main": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.electron.js --progress",
     "build": "npm run build:page && npm run build:main",
-    "clean": "rimraf build"
+    "package": "cross-env NODE_ENV=production node package.js ",
+    "clean": "rimraf build",
+    "clean:release": "rimraf release"
   },
   "repository": {
     "type": "git",
