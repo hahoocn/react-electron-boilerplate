@@ -34,7 +34,7 @@ $ npm run start
 ````
 $ npm run package
 ````
-./package.js to modify the package configuration.
+package.js to modify the package configuration.
 
 Packaged file output to the release folder
 
