@@ -49,14 +49,24 @@ const webpackConfig = {
         loader: 'style!css?modules&minimize&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss'
       },
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
+        test: /\.(jpe?g|png|gif)$/,
         include: srcPath,
-        loader: 'url?limit=8192&name=images/[name].[ext]!image-webpack?{progressive:true, optimizationLevel: 8, svgo:{removeTitle:true,removeViewBox:false,removeRasterImages:true,sortAttrs:true,removeAttrs:false}}'
+        loader: 'url?limit=8192&name=images/[name].[ext]!image-webpack?{ progressive:true, optimizationLevel: 7 }'
       },
       {
-        test: /\.(woff2?|otf|eot|ttf)$/i,
+        test: /\.svg(\?[\s\S]+)?$/,
         include: srcPath,
-        loader: 'url?name=fonts/[name].[ext]'
+        loader: 'url?limit=8192&name=svg/[name].[ext]&mimetype=image/svg+xml!image-webpack?{ svgo: {plugins: [{ removeUselessDefs: false }, { removeTitle: true }, { removeRasterImages: true }, { sortAttrs: true } ]} }'
+      },
+      {
+        test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        include: srcPath,
+        loader: "url?limit=8192&name=fonts/[name].[ext]"
+      },
+      {
+        test: /\.(ttf|eot)(\?[\s\S]+)?$/,
+        include: srcPath,
+        loader: 'file?name=fonts/[name].[ext]'
       }
     ],
   },
