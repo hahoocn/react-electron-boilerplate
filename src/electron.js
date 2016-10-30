@@ -1,4 +1,4 @@
-/* eslint import/no-unresolved: 0 */
+/* eslint import/no-extraneous-dependencies: ["error", {"optionalDependencies": false}] */
 import { app, BrowserWindow } from 'electron';
 
 let mainWindow;

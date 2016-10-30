@@ -2,6 +2,7 @@ import React from 'react';
 
 export default function NotFound() {
   const styles = require('./NotFound.css');
+
   return (
     <div className={styles.notFound}>
       <h1>404</h1>

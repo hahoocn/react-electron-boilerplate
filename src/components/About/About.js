@@ -14,6 +14,7 @@ class About extends React.Component {
   render() {
     const homeStyles = require('../../containers/Home/Home.css');
     const styles = require('./About.css');
+
     return (
       <div className={homeStyles.main}>
         <div className={homeStyles.logo}><img src={logoImg} alt="" /></div>
@@ -23,7 +24,7 @@ class About extends React.Component {
           Redux, Webpack, CSS Modules, PostCSS, Babel, ES2015, ESLint ... )
         </h3>
       </div>
-		);
+    );
   }
 }
 
