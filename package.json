@@ -1,7 +1,7 @@
 {
   "name": "react-electron-boilerplate",
   "productName": "MyApp",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Boilerplate app for Electron with React",
   "main": "main.js",
   "scripts": {
