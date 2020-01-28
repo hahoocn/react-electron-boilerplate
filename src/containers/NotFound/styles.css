@@ -1,0 +1,12 @@
+.notFound {
+  text-align: center;
+  padding: 50px;
+
+  h1 {
+    font-size: 5em;
+  }
+
+  p {
+    font-size: 1.5em;
+  }
+}

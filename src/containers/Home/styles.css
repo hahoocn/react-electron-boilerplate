@@ -1,5 +1,9 @@
 .main {
   text-align: center;
+
+  h1 {
+    margin-top: 50px;
+  }
 }
 
 .logo img {
@@ -13,4 +17,6 @@
 
 .about {
   color: blue;
+  cursor: pointer;
+  outline: none;
 }

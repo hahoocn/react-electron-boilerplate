@@ -1,12 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require('autoprefixer');
 const postcssNested = require('postcss-nested');
 const postcssMixins = require('postcss-mixins');
 const postcssSimpleVars = require('postcss-simple-vars');
-const CleanPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const config = require('../src/config');
 const rootPath = path.resolve(__dirname, '../');
@@ -16,85 +16,169 @@ const distPath = path.join(rootPath, '/build/');
 const webpackConfig = {
   devtool: false,
   entry: {
-    main: ['babel-polyfill', srcPath + 'index']
+    main: ['@babel/polyfill', srcPath + 'index']
   },
   output: {
     path: distPath,
-    filename: 'js/[name].js'
+    filename: 'js/[chunkhash].[name].js'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.(jsx|js)$/,
         include: srcPath,
-        loaders: ['babel']
-      },
-      {
-        test: /\.json$/,
-        loader: 'json'
+        use: ['babel-loader']
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&minimize&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss')
+        include: srcPath,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../',
+            },
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                mode: 'local',
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              },
+              importLoaders: 1,
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: () => [postcssMixins, postcssSimpleVars, postcssNested, autoprefixer]
+            },
+          },
+        ]
+      },
+      {
+        test: /\.css$/,
+        exclude: srcPath,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              publicPath: '../',
+            },
+          },
+          {
+            loader: 'css-loader',
+          },
+        ]
       },
       {
         test: /\.(jpe?g|png|gif)$/,
-        loader: 'url?limit=8192&name=images/[name].[ext]!image-webpack?{ progressive:true, optimizationLevel: 7 }'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: '/images/[name].[ext]'
+            }
+          }
+        ]
       },
       {
         test: /\.svg$/,
         include: srcPath,
-        loader: 'url?limit=8192&name=svg/[name].[ext]&mimetype=image/svg+xml!image-webpack?{ svgo: {plugins: [{ removeUselessDefs: false }, { removeTitle: true }, { removeRasterImages: true }, { sortAttrs: true } ]} }'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: '/svg/[name].[ext]',
+              mimetype: 'image/svg+xml'
+            }
+          },
+          {
+            loader: 'svgo-loader',
+            options: {
+              plugins: [
+                {
+                  removeUselessDefs: false
+                },
+                {
+                  removeTitle: true
+                },
+                {
+                  removeRasterImages: true
+                },
+                {
+                  sortAttrs: true
+                }
+              ]
+            }
+          },
+        ]
       },
       {
         test: /\.svg(\?[\s\S]+)?$/,
         exclude: srcPath,
-        loader: 'url?limit=8192&name=fonts/[name].[ext]&mimetype=image/svg+xml'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: '/fonts/[name].[ext]'
+            }
+          },
+        ]
       },
       {
         test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        loader: "url?limit=8192&name=fonts/[name].[ext]"
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+              name: '/fonts/[name].[ext]'
+            }
+          },
+        ]
       },
       {
         test: /\.(ttf|eot)(\?[\s\S]+)?$/,
-        loader: 'file?name=fonts/[name].[ext]'
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '/fonts/[name].[ext]'
+            }
+          },
+        ]
       }
     ],
   },
-  postcss: function () {
-    return [postcssMixins, postcssSimpleVars, postcssNested, autoprefixer];
-  },
   plugins: [
-    new CleanPlugin([distPath], {
-      root: rootPath
+    new CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [distPath]
     }),
     new HtmlWebpackPlugin({
       title: config.app.title,
-      hash: true,
+      hash: false,
       template: srcPath + 'template/index.html',
-      filename: distPath + 'index.html'
+      filename: distPath + 'index.html',
+      // inject: false
     }),
-    new ExtractTextPlugin('css/[name].css'),
-    new webpack.DefinePlugin({
-      'process.env':{
-        'NODE_ENV': JSON.stringify('production')
-      }
+    new MiniCssExtractPlugin({
+      filename: 'css/[chunkhash].[name].css',
+      ignoreOrder: true
     }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-        unused: true,
-        dead_code: true,
-        drop_debugger: true,
-        drop_console: true
-      }
-    })
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'production',
+      STAGE: 'prod'
+    }),
   ],
   resolve: {
-    extensions: ['', '.js', '.jsx'],
-  }
-}
+    extensions: ['.js', '.jsx'],
+  },
+  mode: 'production'
+};
 
 module.exports = webpackConfig;
