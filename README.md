@@ -22,7 +22,7 @@ After waiting for the webpack package, refresh the program
 
 ## Redux DevTools
 
-We used [Remote Redux DevTools](https://github.com/zalmoxisus/remote-redux-devtools) and [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
+We used [Electron DevTools Installer](https://github.com/MarshallOfSound/electron-devtools-installer) and [Redux DevTools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 
 ## Building and Running Production
 ````
