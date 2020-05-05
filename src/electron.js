@@ -1,13 +1,19 @@
-import { app, BrowserWindow } from 'electron';
-import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
+import { app, BrowserWindow, globalShortcut, Menu } from 'electron';
+// import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
 
 let mainWindow;
 
+Menu.setApplicationMenu(null);
+
 function createWindow() {
-  installExtension(REDUX_DEVTOOLS)
-    .then(name => console.log(`Added Extension:  ${name}`))
-    .catch(err => console.log('An error occurred: ', err));
+  // installExtension(REDUX_DEVTOOLS)
+  //   .then(name => console.log(`Added Extension:  ${name}`))
+  //   .catch(err => console.log('An error occurred: ', err));
+
+  if (process.env.NODE_ENV !== 'development') {
+    globalShortcut.register('CmdOrCtrl+R', () => {});
+  }
 
   mainWindow = new BrowserWindow({
     width: 800,

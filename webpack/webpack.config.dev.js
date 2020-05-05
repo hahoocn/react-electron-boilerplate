@@ -207,7 +207,12 @@ const webpackConfig = {
       'react-dom': '@hot-loader/react-dom',
     },
   },
-  mode: 'development'
+  mode: 'development',
+  target: 'electron-renderer',
+  node: {
+    __dirname: false,
+    __filename: false
+  },
 };
 
 module.exports = webpackConfig;

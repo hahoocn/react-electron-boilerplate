@@ -1,8 +1,9 @@
 {
   "name": "react-electron-boilerplate",
   "productName": "MyApp",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Boilerplate app for Electron with React",
+  "main": "app/main.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production electron ./build/main",
     "start:hot": "cross-env NODE_ENV=development STAGE=dev webpack-dev-server --hot --config webpack/webpack.config.dev.js",
@@ -11,9 +12,13 @@
     "build:page": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.prod.js --progress",
     "build:main": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.electron.js --progress",
     "build": "npm run build:page && npm run build:main",
-    "package": "cross-env NODE_ENV=production node package.js ",
     "clean": "rimraf build",
-    "clean:release": "rimraf release"
+    "clean:release": "rimraf release",
+    "rebuild": "electron-rebuild",
+    "rebuildwin": "electron-rebuild.cmd",
+    "postinstall": "electron-builder install-app-deps",
+    "package-mac": "electron-builder build --mac",
+    "package-win": "electron-builder build --win --x64"
   },
   "repository": {
     "type": "git",
@@ -31,66 +36,112 @@
     "url": "https://github.com/hahoocn/react-electron-boilerplate/issues"
   },
   "homepage": "https://github.com/hahoocn/react-electron-boilerplate#readme",
+  "build": {
+    "productName": "My App",
+    "asar": true,
+    "npmRebuild": false,
+    "extraResources": [],
+    "files": [
+      {
+        "from": "build/",
+        "to": "app/"
+      },
+      "package.json"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "mac": {
+      "target": "dmg",
+      "identity": null
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": false
+    },
+    "directories": {
+      "buildResources": "resources",
+      "output": "release"
+    },
+    "publish": null
+  },
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-export-default-from": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/register": "^7.8.3",
-    "@hot-loader/react-dom": "^16.11.0",
-    "autoprefixer": "^9.7.4",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.0.6",
+    "@babel/polyfill": "^7.8.7",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-react": "^7.9.4",
+    "@babel/register": "^7.9.0",
+    "@hot-loader/react-dom": "^16.13.0",
+    "autoprefixer": "^9.7.6",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.1.0",
     "clean-webpack-plugin": "^3.0.0",
-    "cross-env": "^7.0.0",
-    "css-loader": "^3.4.2",
-    "electron": "^7.1.10",
-    "electron-devtools-installer": "^2.2.4",
-    "electron-packager": "^14.2.0",
+    "concurrently": "^5.2.0",
+    "connected-react-router": "^6.8.0",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.5.3",
+    "electron": "^8.2.5",
+    "electron-builder": "^22.6.0",
+    "electron-devtools-installer": "^3.0.0",
+    "electron-rebuild": "^1.10.1",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.0.1",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-import": "^2.20.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.18.0",
-    "file-loader": "^5.0.2",
-    "html-webpack-plugin": "^3.2.0",
+    "eslint-plugin-react": "^7.19.0",
+    "file-loader": "^6.0.0",
+    "hahoorequest": "^0.6.7",
+    "history": "^4.10.1",
+    "html-webpack-plugin": "^4.3.0",
+    "immutable": "^4.0.0-rc.12",
     "mini-css-extract-plugin": "^0.9.0",
-    "postcss": "^7.0.26",
+    "postcss": "^7.0.29",
     "postcss-loader": "^3.0.0",
     "postcss-mixins": "^6.2.3",
     "postcss-nested": "^4.2.1",
     "postcss-simple-vars": "^5.0.2",
-    "react-hot-loader": "^4.12.19",
-    "rimraf": "^3.0.0",
-    "style-loader": "^1.1.3",
-    "svgo": "^1.3.2",
-    "svgo-loader": "^2.2.1",
-    "url-loader": "^3.0.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.1"
-  },
-  "dependencies": {
-    "@babel/polyfill": "^7.8.3",
-    "concurrently": "^5.0.2",
-    "connected-react-router": "^6.6.1",
-    "hahoorequest": "^0.6.7",
-    "history": "^4.10.1",
-    "immutable": "^4.0.0-rc.12",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-helmet": "^5.2.1",
-    "react-redux": "^7.1.3",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-helmet": "^6.0.0",
+    "react-hot-loader": "^4.12.21",
+    "react-redux": "^7.2.0",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-act-reducer": "^2.1.0",
     "redux-immutable": "^4.0.0",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "rimraf": "^3.0.2",
+    "style-loader": "^1.2.1",
+    "svgo": "^1.3.2",
+    "svgo-loader": "^2.2.1",
+    "url-loader": "^4.1.0",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.10.3"
   }
 }

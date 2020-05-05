@@ -178,7 +178,12 @@ const webpackConfig = {
   resolve: {
     extensions: ['.js', '.jsx'],
   },
-  mode: 'production'
+  mode: 'production',
+  target: 'electron-renderer',
+  node: {
+    __dirname: false,
+    __filename: false
+  },
 };
 
 module.exports = webpackConfig;

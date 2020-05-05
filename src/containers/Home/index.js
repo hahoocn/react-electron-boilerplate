@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import { showHello, showHelloAsync, showMoviesAsync } from './actions';
 import { selectInfo, selectHome } from './selectors';
 import styles from './styles.css';

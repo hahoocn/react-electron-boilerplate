@@ -32,9 +32,10 @@ $ npm run start
 
 ## Package
 ````
-$ npm run package
+$ npm run package-mac
+$ npm run package-win
 ````
-package.js to modify the package configuration.
+package.json to modify the package configuration.
 
 Packaged file output to the release folder
 
